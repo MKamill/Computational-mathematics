@@ -1,0 +1,142 @@
+// ----------------------------<ПРИМЕР1>-----------------------------
+// const promise1 = new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//         console.log('preparing data...')
+//         const userData = {
+//             id: 2,
+//             userName: 'Kamil'
+//         }
+//         resolve(userData);
+//     }, 2000);
+// });
+
+// //выполнится после вызова resolve
+// promise1.then(function resolve(userData) {
+//     console.log('promise resolved', userData)
+// })
+// ----------------------------</ПРИМЕР1>----------------------------
+
+// ----------------------------<ПРИМЕР2>-----------------------------
+// const promise2 = new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//         console.log('preparing data...')
+//         const userData = {
+//             id: 2,
+//             userName: 'Kamil'
+//         }
+//         resolve(userData); //передаем userData в resolve 
+//     }, 2000);
+// });
+
+// //выполнится после вызова resolve (вызываем resolve with userData)
+// promise2.then(function resolve(userData) {
+//     const promise3 = new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             userData.modified = true // userData -> modifiedUserData
+//             resolve(userData)  // userData -> modifiedUserData
+//         }, 2000)
+//     })
+
+//     promise3.then(function (modifiedUserData) { 
+//         console.log('Data received', modifiedUserData)
+//     })
+// })
+// ----------------------------</ПРИМЕР2>----------------------------
+
+
+// ----------------------------<ПРИМЕР3>-----------------------------
+// //УПРОЩЕННЫЙ ВАРИАНТ ПРИМЕРА ДВА (БЕЗ ОБЪЯВЛЕНИЯ promise3)
+// const promise2 = new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//         console.log('preparing data...')
+//         const userData = {
+//             id: 2,
+//             userName: 'Kamil'
+//         }
+//         resolve(userData); //передаем userData в resolve 
+//     }, 2000);
+// });
+
+// //выполнится после вызова resolve (вызываем resolve with userData)
+// promise2.then(function resolve(userData) {
+//     //возвращаем из then НЕИМЕНОВАННЫЙ Promise
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             userData.modified = true // userData -> modifiedUserData
+//             resolve(userData)  // userData -> modifiedUserData
+//         }, 2000)
+//     })
+// }).then(function resolve(modifiedUserData) {
+//     console.log('Data received', modifiedUserData)
+// })// chaine = цепь
+// ----------------------------</ПРИМЕР3>----------------------------
+
+// ----------------------------<ПРИМЕР4>-----------------------------
+// //возвращаем в цепочке измененные данные, а не Promise
+// const promise2 = new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//         console.log('preparing data...')
+//         const userData = {
+//             id: 2,
+//             userName: 'Kamil'
+//         }
+//         resolve(userData); //передаем userData в resolve 
+//     }, 2000);
+// });
+
+// //выполнится после вызова resolve (вызываем resolve with userData)
+// promise2.then(function resolve(userData) {
+//     //возвращаем из then НЕИМЕНОВАННЫЙ Promise
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             userData.modified = true // userData -> modifiedUserData
+//             resolve(userData)  // userData -> modifiedUserData // если ошибка меняем resolve на reject
+//         }, 2000)
+//     })
+// }).then(function resolve(modifiedUserData) {
+//     console.log('Data received', modifiedUserData)
+//     //возвращаем в цепочке измененные данные, а не Promise
+//     modifiedUserData.Age = 19
+//     return modifiedUserData
+// }).then(modifiedUserData => {
+//     console.log('Изменные в цепочке данные: ', modifiedUserData)
+// }).catch(err => {
+//     console.log('Error: ', err) //ловим ошибки (должен быть вызван reject)
+// }).finally(()=>{
+//     console.log('Something data for finally block') //вызовется в любом случае даже при reject
+// }) 
+// ----------------------------</ПРИМЕР4>----------------------------
+
+// ----------------------------<ПРИМЕР5>-----------------------------
+const sleep = (ms) => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve()
+        }, ms)
+    })
+}
+
+// sleep(2000).then(() => {
+//     console.log('Áfter 2 seconds')
+// })
+
+// sleep(3000).then(() => {
+//     console.log('Áfter 3 seconds')
+// })
+
+// Promise.all ждет пока все промисы из массива завершатся и только потом перейдет в блок .then
+Promise.all([sleep(2000), sleep(6000)])
+    .then(() => {
+        console.log('All promises')
+    })
+
+// Promise.race не ждет пока все промисы из массива завершатся, а сразу после выполнения самого быстрого перейдет в блок .then
+Promise.race([sleep(2000), sleep(6000)])
+    .then(() => {
+        console.log('All promises')
+    })
+// ----------------------------</ПРИМЕР5>----------------------------
+
+
+
+
