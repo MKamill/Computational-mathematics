@@ -21,15 +21,8 @@ function [x1, x2, fx1, fx2, fser] = s(a,b,f)
     end
 endfunction
 
-//disp(f(1))
-//[x1,x2, fx1, fx2, fser]=s(1.245, 1.3875)
-//disp([x1,x2, fx1, fx2, fser])
-
-//plot(-0.01, f, 'g*')
-//plot(0.01, f, 'r*')
 plot(x_, f, 'black')
-//clc
-//
+
 function y=gg(x)
 
 y=0.8*x^3-2*x^2+x-2;
